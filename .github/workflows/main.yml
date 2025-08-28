@@ -1,0 +1,25 @@
+name: Build Electron Installer
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-2022   # safer than windows-latest for now
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install --prefix electron
+
+      - name: Build installer
+        run: npm run dist --prefix electron
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: PayrollInstaller
+          path: electron/dist/*.exe
